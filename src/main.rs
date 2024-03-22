@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Lines};
-use std::path::Path;
 use std::process;
 
 use clap::{Parser, Subcommand};
@@ -46,7 +45,7 @@ enum Command {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     match args.command {
-        None => { return Err("Missing valid arguments use bob -h to get help".into()); }
+        None => { return Err("Missing valid arguments use bob2 -h to get help".into()); }
         Some(Command::Search { filename, pattern }) => {
             search(filename, pattern)
         }

@@ -1,6 +1,6 @@
-# Bob Rust CLI
+# Bob2 Rust CLI
 ### Overview
-bob is a cli tool made for learning purpose as well as a hope to make something useful eventually.
+bob2 is a cli tool made for learning purpose as well as a hope to make something useful eventually.
 it is open to suggestions from others.
 
 ### Prerequisites:
@@ -10,7 +10,7 @@ it is open to suggestions from others.
 ``` bash
 cargo build 
 cd target/debug/
-./bob 
+./bob2 
 ```
 ### Install command
 ``` bash
@@ -20,8 +20,8 @@ cargo install --path .
 ### Example
 
 ```bash
- bob search -f dummy.txt -p lorem
+ bob2 search -f dummy.txt -p lorem
 ```
 ```bash
- bob count -f dummy.txt -p lorem
+ bob2 count -f dummy.txt -p lorem
 ```
