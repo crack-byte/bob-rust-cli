@@ -14,5 +14,5 @@ cargo install --path .
 
 ### Example
 ```bash
-bob -o search -f dummy.txt -p lorem
+ bob search -f dummy.txt -p lorem
 ```
