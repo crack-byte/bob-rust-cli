@@ -10,22 +10,24 @@ enum Operation {
     List,
 }
 
-/// A basic CLI tool to greet the user
+/// A basic CLI tool to provide basic features
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
+#[command(author="crackbyte", version="0.0.1", about, long_about = None)]
 struct Args {
     #[command(subcommand)]
-    done: Option<Command>,
+    command: Option<Command>,
 }
 
 #[derive(Subcommand, Debug, Clone)]
 enum Command {
+    #[command(short_flag = 's')]
     Search {
         #[clap(short = 'f', long)]
         filename: String,
         #[clap(short = 'p', long)]
         pattern: String,
     },
+    #[command(short_flag = 'c')]
     Count {
         #[clap(short = 'f', long)]
         filename: String,
@@ -36,9 +38,8 @@ enum Command {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
-    // Check if at least one argument (-p or -f) is provided
-    match args.done {
-        None => { println!("none") }
+    match args.command {
+        None => { return Err("Missing valid arguments use bob -h to get help".into()); }
         Some(Command::Search { filename, pattern }) => {
             search(filename, pattern)
         }
