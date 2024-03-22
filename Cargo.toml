@@ -1,6 +1,6 @@
 [package]
-name = "bob"
-version = "0.1.0"
+name = "bob2"
+version = "0.0.1"
 edition = "2021"
 description = "This is a cli tool made for learning purpose"
 license = "MIT"
