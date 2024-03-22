@@ -106,7 +106,7 @@ fn count(filename: String, pattern: String) {
         }
     }
     if count > 0 {
-        println!("Found {count} occurrences")
+        println!("Found {count} occurrences.")
     } else {
         println!("Nothing found")
     }
