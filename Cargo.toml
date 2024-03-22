@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.1", features = ["derive"] }
 strum_macros = "0.26.2"
+zip = "0.6.6"

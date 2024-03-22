@@ -2,13 +2,9 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Lines};
 use std::process;
 
-use clap::{Parser, Subcommand, ValueEnum};
-
-#[derive(Parser, Debug, Clone, ValueEnum)]
-enum Operation {
-    Search,
-    List,
-}
+use clap::{Parser, Subcommand};
+use zip::write::FileOptions;
+use zip::ZipWriter;
 
 /// A basic CLI tool to provide basic features
 #[derive(Parser)]
@@ -20,6 +16,7 @@ struct Args {
 
 #[derive(Subcommand, Debug, Clone)]
 enum Command {
+    /// search a pattern in a file
     #[command(short_flag = 's')]
     Search {
         #[clap(short = 'f', long)]
@@ -27,12 +24,21 @@ enum Command {
         #[clap(short = 'p', long)]
         pattern: String,
     },
+    /// count a pattern occurrence in a file
     #[command(short_flag = 'c')]
     Count {
         #[clap(short = 'f', long)]
         filename: String,
         #[clap(short = 'p', long)]
         pattern: String,
+    },
+    /// compress a file
+    #[command(short_flag = 'z')]
+    Compress {
+        #[clap(short = 'f', long)]
+        filename: String,
+        #[clap(short = 'o', long)]
+        output: String,
     },
 }
 
@@ -45,6 +51,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Some(Command::Count { filename, pattern }) => {
             count(filename, pattern)
+        }
+
+        Some(Command::Compress { filename,output }) => {
+            match compress_file(&filename, &output) {
+                Ok(_) => println!("Compression successful!"),
+                Err(e) => println!("Error: {}", e),
+            }
         }
     }
     Ok(())
@@ -97,4 +110,18 @@ fn count(filename: String, pattern: String) {
     } else {
         println!("Nothing found")
     }
+}
+fn compress_file(src_file: &str, archive_file: &str) -> Result<(), zip::result::ZipError> {
+    let mut src_f = File::open(src_file)?;
+    let dest_f = File::create(archive_file)?;
+
+    let mut zip = ZipWriter::new(dest_f);
+    let options = FileOptions::default()
+        .compression_method(zip::CompressionMethod::Bzip2); // No compression for simplicity
+
+    zip.start_file(src_file, options)?;
+    std::io::copy(&mut src_f, &mut zip)?;
+
+    zip.finish()?;
+    Ok(())
 }
