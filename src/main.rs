@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Lines};
+use std::path::Path;
 use std::process;
 
 use clap::{Parser, Subcommand};
@@ -8,7 +9,7 @@ use zip::ZipWriter;
 
 /// A basic CLI tool to provide basic features
 #[derive(Parser)]
-#[command(author="crackbyte", version="0.0.1", about, long_about = None)]
+#[command(author = "crackbyte", version = "0.0.1", about, long_about = None)]
 struct Args {
     #[command(subcommand)]
     command: Option<Command>,
@@ -38,7 +39,7 @@ enum Command {
         #[clap(short = 'f', long)]
         filename: String,
         #[clap(short = 'o', long)]
-        output: String,
+        output: Option<String>,
     },
 }
 
@@ -53,8 +54,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             count(filename, pattern)
         }
 
-        Some(Command::Compress { filename,output }) => {
-            match compress_file(&filename, &output) {
+        Some(Command::Compress { filename, output }) => {
+            let x = filename.splitn(2, '.').next().unwrap_or("");
+            let output_filename = output.unwrap_or_else(|| format!("{}.zip", x));
+            match compress_file(&filename, &output_filename) {
                 Ok(_) => println!("Compression successful!"),
                 Err(e) => println!("Error: {}", e),
             }
@@ -111,13 +114,14 @@ fn count(filename: String, pattern: String) {
         println!("Nothing found")
     }
 }
+
 fn compress_file(src_file: &str, archive_file: &str) -> Result<(), zip::result::ZipError> {
     let mut src_f = File::open(src_file)?;
     let dest_f = File::create(archive_file)?;
 
     let mut zip = ZipWriter::new(dest_f);
     let options = FileOptions::default()
-        .compression_method(zip::CompressionMethod::Bzip2); // No compression for simplicity
+        .compression_method(zip::CompressionMethod::Bzip2);
 
     zip.start_file(src_file, options)?;
     std::io::copy(&mut src_f, &mut zip)?;
