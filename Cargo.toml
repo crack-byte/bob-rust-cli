@@ -2,6 +2,8 @@
 name = "bob"
 version = "0.1.0"
 edition = "2021"
+description = "This is a cli tool made for learning purpose"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
