@@ -14,9 +14,14 @@ cd target/debug/
 ```
 ### Install command
 ``` bash
+cd bob-rust-cli 
 cargo install --path .
 ```
-
+or 
+Install from publc crates repo
+``` bash
+cargo install bob2
+```
 ### Example
 
 ```bash
